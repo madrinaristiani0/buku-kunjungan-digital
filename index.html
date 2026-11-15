@@ -56,10 +56,11 @@
         </div>
     </div>
 
+    <!-- HEADER: MENU BURGER DI POJOK KANAN ATAS STANDAR -->
     <header class="bg-gradient-to-r from-tosca-600 via-tosca-500 to-teal-500 text-white shadow-lg border-b-4 border-butter-300 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex items-center gap-4 relative">
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
                     <div class="bg-butter-200 p-2.5 rounded-2xl shadow-md border-2 border-white shrink-0 transform -rotate-2 hover:rotate-0 transition duration-300">
                         <svg class="w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M32 4L34.8 10.2L41.5 11L36.5 15.6L37.8 22.2L32 18.9L26.2 22.2L27.5 15.6L22.5 11L29.2 10.2L32 4Z" fill="#F97316" stroke="#EA580C" stroke-width="1.5" stroke-linejoin="round"/>
@@ -75,44 +76,33 @@
                     </div>
                     <div>
                         <span class="inline-block px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-butter-300 text-tosca-700 mb-1 shadow-xs">Buku Kunjungan Digital</span>
-                        <h1 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Perpustakaan MI Asih Putera</h1>
-                        <p class="text-tosca-100 text-sm font-medium">Yuk, isi kehadiranmu sebelum membaca dan belajar!</p>
+                        <h1 class="font-display text-xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Perpustakaan MI Asih Putera</h1>
+                        <p class="text-tosca-100 text-xs sm:text-sm font-medium">Yuk, isi kehadiranmu sebelum membaca dan belajar!</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3 self-start md:self-center">
-                    <div class="bg-white/15 backdrop-blur-md border border-white/30 rounded-2xl px-4 py-2.5 flex items-center gap-3">
-                        <div class="bg-butter-300 text-tosca-700 p-2 rounded-xl">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        </div>
-                        <div>
-                            <div id="live-date" class="text-xs font-medium text-butter-200">Memuat tanggal...</div>
-                            <div id="live-clock" class="font-display text-lg font-bold text-white tracking-wide">00:00:00 WIB</div>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <button type="button" id="admin-menu-btn" title="Menu Admin / Berkas" class="bg-white/20 hover:bg-white/30 border border-white/40 text-white p-3 rounded-2xl transition cursor-pointer flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
-                            </svg>
+                <!-- MENU BURGER DI POJOK KANAN ATAS -->
+                <div class="relative shrink-0">
+                    <button type="button" id="admin-menu-btn" title="Menu Admin / Berkas" class="bg-white/20 hover:bg-white/30 border border-white/40 text-white p-3 rounded-2xl transition cursor-pointer flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                    <div id="admin-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border-2 border-tosca-200 py-2 z-50 text-slate-800">
+                        <div class="px-4 py-2 border-b border-slate-100 font-display font-bold text-xs text-tosca-700 uppercase tracking-wider">Pengaturan Data</div>
+                        <button type="button" id="btn-export-excel" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
+                            <svg class="w-4 h-4 text-tosca-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            Ekspor Excel (.xlsx)
                         </button>
-                        <div id="admin-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border-2 border-tosca-200 py-2 z-50 text-slate-800">
-                            <div class="px-4 py-2 border-b border-slate-100 font-display font-bold text-xs text-tosca-700 uppercase tracking-wider">Pengaturan Data</div>
-                            <button type="button" id="btn-export-excel" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
-                                <svg class="w-4 h-4 text-tosca-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                Ekspor Excel (.xlsx)
-                            </button>
-                            <label for="input-import-excel" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
-                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                                Impor File Excel
-                                <input type="file" id="input-import-excel" accept=".xlsx, .xls, .csv" class="hidden">
-                            </label>
-                            <button type="button" id="btn-download-template" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
-                                <svg class="w-4 h-4 text-oranye-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                Unduh Template Excel
-                            </button>
-                        </div>
+                        <label for="input-import-excel" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
+                            <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                            Impor File Excel
+                            <input type="file" id="input-import-excel" accept=".xlsx, .xls, .csv" class="hidden">
+                        </label>
+                        <button type="button" id="btn-download-template" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
+                            <svg class="w-4 h-4 text-oranye-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Unduh Template Excel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -169,13 +159,14 @@
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            <!-- FORMULIR DENGAN TATA LETAK HEADER YANG PAS & RAPI -->
             <section class="lg:col-span-5 bg-white rounded-3xl shadow-md border-4 border-tosca-200 overflow-hidden">
-                <div id="form-header" class="bg-butter-200 px-6 py-4 border-b-2 border-butter-300 flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <span id="form-indicator" class="w-3.5 h-3.5 rounded-full bg-oranye-500 inline-block"></span>
-                        <h2 id="form-title" class="font-display text-xl font-bold text-tosca-700">Isi Data Kunjungan</h2>
+                <div id="form-header" class="bg-butter-200 px-5 sm:px-6 py-4 border-b-2 border-butter-300 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <span id="form-indicator" class="w-3.5 h-3.5 rounded-full bg-oranye-500 inline-block shrink-0"></span>
+                        <h2 id="form-title" class="font-display text-lg sm:text-xl font-bold text-tosca-700 truncate">Isi Data Kunjungan</h2>
                     </div>
-                    <span id="form-badge" class="text-xs font-bold bg-white text-tosca-700 px-3 py-1 rounded-full shadow-xs">Mudah & Cepat</span>
+                    <span id="form-badge" class="text-xs font-bold bg-white text-tosca-700 px-3 py-1 rounded-full shadow-xs shrink-0">Mudah & Cepat</span>
                 </div>
                 <form id="visit-form" class="p-6 space-y-5" novalidate>
                     <input type="hidden" id="editing-id" value="">
@@ -248,15 +239,12 @@
                 </form>
             </section>
 
+            <!-- TABEL DENGAN PAGINATION (TANPA TOMBOL BERSIHKAN DATA) -->
             <section class="lg:col-span-7 space-y-5">
                 <div class="bg-white rounded-3xl shadow-md border-2 border-tosca-200 overflow-hidden">
                     <div class="p-5 bg-tosca-50/70 border-b border-tosca-100 space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center justify-between gap-2">
                             <h3 class="font-display text-lg font-bold text-slate-800">Daftar Kunjungan (<span id="filtered-count" class="text-tosca-600">0</span>)</h3>
-                            <button type="button" id="btn-reset-all" class="text-xs font-semibold text-red-600 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition self-start sm:self-auto flex items-center gap-1 cursor-pointer">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                <span>Bersihkan Data</span>
-                            </button>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                             <div class="relative">
@@ -277,7 +265,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                    <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead class="bg-butter-100 text-tosca-800 text-xs uppercase font-bold sticky top-0 z-10 border-b border-butter-300">
                                 <tr>
@@ -292,6 +280,17 @@
                             <tbody id="visits-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
                         </table>
                     </div>
+                    
+                    <!-- KONTROL PAGINATION -->
+                    <div id="pagination-container" class="px-5 py-3.5 bg-tosca-50/50 border-t border-tosca-100 flex items-center justify-between text-xs sm:text-sm">
+                        <span id="pagination-info" class="text-slate-600 font-semibold">Menampilkan 0 dari 0 data</span>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" id="prev-page-btn" class="px-3 py-1.5 rounded-xl bg-white border border-tosca-200 text-tosca-700 font-bold hover:bg-tosca-100 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">Sebelumnya</button>
+                            <span id="page-indicator" class="px-2 font-bold text-slate-700">1 / 1</span>
+                            <button type="button" id="next-page-btn" class="px-3 py-1.5 rounded-xl bg-white border border-tosca-200 text-tosca-700 font-bold hover:bg-tosca-100 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">Berikutnya</button>
+                        </div>
+                    </div>
+
                     <div id="empty-state" class="hidden py-12 px-4 text-center">
                         <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-butter-100 text-oranye-500 flex items-center justify-center">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
@@ -304,17 +303,21 @@
         </div>
     </main>
 
+    <!-- FOOTER DENGAN FORMAT TEKS BARU -->
     <footer class="bg-white border-t border-tosca-100 py-4 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
-            <p class="font-semibold text-tosca-700">Perpustakaan MI Asih Putera &bull; Membaca Membuka Jendela Dunia</p>
+            <p class="font-semibold text-tosca-700">MI Asih Putera @ 2026</p>
             <p>Data tersimpan otomatis di Google Sheets.</p>
         </div>
     </footer>
 
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFcRqHFiA-YNp2JOixQCsEtDMayM7idNyJXhOwAgAKoKmEmnQIMCIrImB1QXgwGDqcdg/exec";
+        const APPS_SCRIPT_URL = "GANTI_DENGAN_URL_DEPLOY_APPS_SCRIPT_ANDA";
 
         let visitsData = [];
+        let currentPage = 1;
+        const rowsPerPage = 10; // Jumlah data per halaman
+
         const visitForm = document.getElementById('visit-form');
         const editingIdInput = document.getElementById('editing-id');
         const formHeader = document.getElementById('form-header');
@@ -340,12 +343,18 @@
         const statBelajar = document.getElementById('stat-belajar');
         const statMain = document.getElementById('stat-main');
         
+        // Pagination Elements
+        const paginationContainer = document.getElementById('pagination-container');
+        const paginationInfo = document.getElementById('pagination-info');
+        const pageIndicator = document.getElementById('page-indicator');
+        const prevPageBtn = document.getElementById('prev-page-btn');
+        const nextPageBtn = document.getElementById('next-page-btn');
+
         const adminMenuBtn = document.getElementById('admin-menu-btn');
         const adminDropdown = document.getElementById('admin-dropdown');
         const btnExportExcel = document.getElementById('btn-export-excel');
         const inputImportExcel = document.getElementById('input-import-excel');
         const btnDownloadTemplate = document.getElementById('btn-download-template');
-        const btnResetAll = document.getElementById('btn-reset-all');
 
         adminMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -580,22 +589,6 @@
             });
         };
 
-        btnResetAll.addEventListener('click', () => {
-            if (visitsData.length === 0) { showToast('Daftar kunjungan sudah kosong.', 'info'); return; }
-            showModalDialog({
-                title: 'Bersihkan Semua Data?',
-                message: `Seluruh (${visitsData.length}) catatan kunjungan akan dihapus dari Google Sheets!`,
-                confirmText: 'Ya, Bersihkan Semua',
-                onConfirm: async () => {
-                    showToast("Membersihkan database...", "info");
-                    await postToSheets({ action: 'CLEAR_ALL' });
-                    resetFormState();
-                    showToast('Semua data kunjungan telah dibersihkan.', 'info');
-                    await fetchVisitsFromSheets();
-                }
-            });
-        });
-
         function getPurposeBadgeHTML(purpose) {
             const normalized = normalizePurpose(purpose);
             switch (normalized) {
@@ -609,7 +602,7 @@
 
         function updateTodayStats() {
             const todayISO = getTodayISO();
-            const todayFormatted = todayISO.split('-').reverse().join('/'); // Format DD/MM/YYYY
+            const todayFormatted = todayISO.split('-').reverse().join('/');
             
             const todayVisits = visitsData.filter(item => String(item.date).startsWith(todayFormatted));
             statTotal.textContent = todayVisits.length;
@@ -619,14 +612,15 @@
             statMain.textContent = todayVisits.filter(i => normalizePurpose(i.purpose) === 'Main').length;
         }
 
+        // RENDER TABEL DENGAN PAGINATION
         function renderTable() {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const purposeFilter = filterPurposeSelect.value;
-            const dateFilter = filterDateInput.value; // Format YYYY-MM-DD dari input date
+            const dateFilter = filterDateInput.value;
 
             let formattedDateFilter = "";
             if (dateFilter) {
-                formattedDateFilter = dateFilter.split('-').reverse().join('/'); // Ubah ke DD/MM/YYYY
+                formattedDateFilter = dateFilter.split('-').reverse().join('/');
             }
 
             const filtered = visitsData.filter(item => {
@@ -637,19 +631,32 @@
             });
             
             filteredCountEl.textContent = filtered.length;
+
+            // Logika Pagination
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const paginatedItems = filtered.slice(startIndex, endIndex);
+
             visitsTableBody.innerHTML = '';
             
             if (filtered.length === 0) {
                 emptyState.classList.remove('hidden');
+                paginationContainer.classList.add('hidden');
                 return;
             }
             emptyState.classList.add('hidden');
-            
-            filtered.forEach((item, index) => {
+            paginationContainer.classList.remove('hidden');
+
+            paginatedItems.forEach((item, index) => {
+                const absoluteIndex = startIndex + index + 1;
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-tosca-50/40 transition';
                 tr.innerHTML = `
-                    <td class="py-3 px-3 text-center font-semibold text-slate-500">${index + 1}</td>
+                    <td class="py-3 px-3 text-center font-semibold text-slate-500">${absoluteIndex}</td>
                     <td class="py-3 px-3 whitespace-nowrap">
                         <div class="font-semibold text-slate-700">${escapeHTML(item.date)}</div>
                         <div class="text-xs text-slate-400">${escapeHTML(item.time)} WIB</div>
@@ -670,7 +677,40 @@
                 `;
                 visitsTableBody.appendChild(tr);
             });
+
+            // Update Teks & Status Tombol Pagination
+            paginationInfo.textContent = `Menampilkan ${startIndex + 1}-${Math.min(endIndex, filtered.length)} dari ${filtered.length} data`;
+            pageIndicator.textContent = `${currentPage} / ${totalPages}`;
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === totalPages;
         }
+
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            const filteredCount = visitsData.filter(item => {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const purposeFilter = filterPurposeSelect.value;
+                const dateFilter = filterDateInput.value;
+                let formattedDateFilter = dateFilter ? dateFilter.split('-').reverse().join('/') : "";
+                
+                const matchSearch = String(item.name).toLowerCase().includes(searchTerm) || String(item.studentClass).toLowerCase().includes(searchTerm);
+                const matchPurpose = !purposeFilter || normalizePurpose(item.purpose) === purposeFilter;
+                const matchDate = !formattedDateFilter || String(item.date) === formattedDateFilter;
+                return matchSearch && matchPurpose && matchDate;
+            }).length;
+
+            const totalPages = Math.ceil(filteredCount / rowsPerPage) || 1;
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        });
 
         function escapeHTML(str) {
             const div = document.createElement('div');
@@ -683,9 +723,9 @@
             renderTable();
         }
 
-        searchInput.addEventListener('input', renderTable);
-        filterPurposeSelect.addEventListener('change', renderTable);
-        filterDateInput.addEventListener('change', renderTable);
+        searchInput.addEventListener('input', () => { currentPage = 1; renderTable(); });
+        filterPurposeSelect.addEventListener('change', () => { currentPage = 1; renderTable(); });
+        filterDateInput.addEventListener('change', () => { currentPage = 1; renderTable(); });
 
         function normalizePurpose(rawPurpose) {
             if (!rawPurpose) return 'Baca Buku';
