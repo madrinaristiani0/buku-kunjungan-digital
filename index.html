@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Kunjungan - Perpustakaan MI Asih Putera</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Fredoka"', 'sans-serif'],
+                    },
+                    colors: {
+                        tosca: { 50: '#F0FDFA', 100: '#CCFBF1', 200: '#99F6E4', 500: '#14B8A6', 600: '#0D9488', 700: '#0F766E' },
+                        oranye: { 50: '#FFF7ED', 100: '#FFEDD5', 200: '#FED7AA', 400: '#FB923C', 500: '#F97316', 600: '#EA580C' },
+                        butter: { 50: '#FEFCE8', 100: '#FEF9C3', 200: '#FEF08A', 300: '#FDE047', 400: '#FACC15' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes popIn { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-pop { animation: popIn 0.25s ease-out forwards; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F0FDFA; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: #99F6E4; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: #14B8A6; }
+    </style>
+</head>
+<body class="bg-butter-50 text-slate-800 min-h-screen flex flex-col selection:bg-tosca-200 selection:text-tosca-700">
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-butter-300 animate-pop">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-12 h-12 rounded-2xl bg-oranye-100 text-oranye-600 flex items-center justify-center shrink-0">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <h3 id="modal-title" class="font-display text-xl font-bold text-slate-800">Konfirmasi</h3>
+            </div>
+            <p id="modal-message" class="text-slate-600 mb-6 leading-relaxed text-sm">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            <div id="modal-actions" class="flex flex-wrap justify-end gap-2.5">
+                <button id="modal-cancel-btn" class="px-4 py-2.5 rounded-xl font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition text-sm cursor-pointer">Batal</button>
+                <button id="modal-secondary-btn" class="hidden px-4 py-2.5 rounded-xl font-semibold text-tosca-800 bg-butter-200 hover:bg-butter-300 border border-butter-400 transition text-sm cursor-pointer">Opsi Kedua</button>
+                <button id="modal-confirm-btn" class="px-5 py-2.5 rounded-xl font-semibold text-white bg-oranye-500 hover:bg-oranye-600 shadow-md shadow-oranye-500/20 transition text-sm cursor-pointer">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-gradient-to-r from-tosca-600 via-tosca-500 to-teal-500 text-white shadow-lg border-b-4 border-butter-300 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-4 relative">
+                    <div class="bg-butter-200 p-2.5 rounded-2xl shadow-md border-2 border-white shrink-0 transform -rotate-2 hover:rotate-0 transition duration-300">
+                        <svg class="w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 4L34.8 10.2L41.5 11L36.5 15.6L37.8 22.2L32 18.9L26.2 22.2L27.5 15.6L22.5 11L29.2 10.2L32 4Z" fill="#F97316" stroke="#EA580C" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 26C8 23.7909 9.79086 22 12 22H52C54.2091 22 56 23.7909 56 26V50C56 52.2091 54.2091 54 52 54H12C9.79086 54 8 52.2091 8 50V26Z" fill="#F97316"/>
+                            <path d="M12 24C12 21.7909 13.7909 20 16 20H29C30.6569 20 32 21.3431 32 23V49C32 47.3431 30.6569 46 29 46H14C12.8954 46 12 45.1046 12 44V24Z" fill="#FFFFFF"/>
+                            <path d="M52 24C52 21.7909 50.2091 20 48 20H35C33.3431 20 32 21.3431 32 23V49C32 47.3431 33.3431 46 35 46H50C51.1046 46 52 45.1046 52 44V24Z" fill="#FEF9C3"/>
+                            <line x1="16" y1="27" x2="27" y2="27" stroke="#14B8A6" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="16" y1="33" x2="25" y2="33" stroke="#14B8A6" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="37" y1="27" x2="48" y2="27" stroke="#0D9488" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="37" y1="33" x2="46" y2="33" stroke="#0D9488" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M27 39C28.5 41.5 35.5 41.5 37 39" stroke="#F97316" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="inline-block px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-butter-300 text-tosca-700 mb-1 shadow-xs">Buku Kunjungan Digital</span>
+                        <h1 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Perpustakaan MI Asih Putera</h1>
+                        <p class="text-tosca-100 text-sm font-medium">Yuk, isi kehadiranmu sebelum membaca dan belajar!</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 self-start md:self-center">
+                    <div class="bg-white/15 backdrop-blur-md border border-white/30 rounded-2xl px-4 py-2.5 flex items-center gap-3">
+                        <div class="bg-butter-300 text-tosca-700 p-2 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <div id="live-date" class="text-xs font-medium text-butter-200">Memuat tanggal...</div>
+                            <div id="live-clock" class="font-display text-lg font-bold text-white tracking-wide">00:00:00 WIB</div>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <button type="button" id="admin-menu-btn" title="Menu Admin / Berkas" class="bg-white/20 hover:bg-white/30 border border-white/40 text-white p-3 rounded-2xl transition cursor-pointer flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                        </button>
+                        <div id="admin-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border-2 border-tosca-200 py-2 z-50 text-slate-800">
+                            <div class="px-4 py-2 border-b border-slate-100 font-display font-bold text-xs text-tosca-700 uppercase tracking-wider">Pengaturan Data</div>
+                            <button type="button" id="btn-export-excel" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
+                                <svg class="w-4 h-4 text-tosca-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Ekspor Excel (.xlsx)
+                            </button>
+                            <label for="input-import-excel" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
+                                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                Impor File Excel
+                                <input type="file" id="input-import-excel" accept=".xlsx, .xls, .csv" class="hidden">
+                            </label>
+                            <button type="button" id="btn-download-template" class="w-full text-left px-4 py-2.5 text-sm font-semibold hover:bg-tosca-50 flex items-center gap-2.5 transition cursor-pointer text-slate-700">
+                                <svg class="w-4 h-4 text-oranye-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                Unduh Template Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-7">
+        <section aria-label="Statistik Kunjungan Hari Ini" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <div class="col-span-2 sm:col-span-1 bg-white rounded-3xl p-4 shadow-xs border-2 border-tosca-200 flex items-center gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-tosca-100 text-tosca-600 flex items-center justify-center shrink-0">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-500">Hadir Hari Ini</p>
+                    <p id="stat-total" class="font-display text-2xl font-bold text-tosca-700">0</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl p-4 shadow-xs border-2 border-butter-300 flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-tosca-100 text-tosca-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-500">Baca Buku</p>
+                    <p id="stat-baca" class="font-display text-xl font-bold text-slate-800">0</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl p-4 shadow-xs border-2 border-oranye-200 flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-oranye-100 text-oranye-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-500">Pinjam Buku</p>
+                    <p id="stat-pinjam" class="font-display text-xl font-bold text-slate-800">0</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl p-4 shadow-xs border-2 border-butter-300 flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-butter-200 text-amber-700 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-500">Belajar</p>
+                    <p id="stat-belajar" class="font-display text-xl font-bold text-slate-800">0</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl p-4 shadow-xs border-2 border-oranye-200 flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-butter-200 text-oranye-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-500">Main</p>
+                    <p id="stat-main" class="font-display text-xl font-bold text-slate-800">0</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            <section class="lg:col-span-5 bg-white rounded-3xl shadow-md border-4 border-tosca-200 overflow-hidden">
+                <div id="form-header" class="bg-butter-200 px-6 py-4 border-b-2 border-butter-300 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <span id="form-indicator" class="w-3.5 h-3.5 rounded-full bg-oranye-500 inline-block"></span>
+                        <h2 id="form-title" class="font-display text-xl font-bold text-tosca-700">Isi Data Kunjungan</h2>
+                    </div>
+                    <span id="form-badge" class="text-xs font-bold bg-white text-tosca-700 px-3 py-1 rounded-full shadow-xs">Mudah & Cepat</span>
+                </div>
+                <form id="visit-form" class="p-6 space-y-5" novalidate>
+                    <input type="hidden" id="editing-id" value="">
+                    <div>
+                        <label for="student-name" class="block text-sm font-bold text-slate-700 mb-1.5">1. Nama Siswa <span class="text-oranye-500">*</span></label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-tosca-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            </div>
+                            <input type="text" id="student-name" placeholder="Ketik nama lengkapmu di sini..." autocomplete="off" required class="w-full pl-11 pr-10 py-3 bg-tosca-50/50 border-2 border-tosca-200 rounded-2xl text-slate-800 font-semibold placeholder-slate-400 focus:outline-none focus:border-tosca-500 focus:bg-white transition text-base">
+                            <button type="button" id="clear-name-btn" title="Hapus teks nama" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-oranye-600 transition cursor-pointer">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="student-class" class="block text-sm font-bold text-slate-700 mb-1.5">2. Kelas <span class="text-oranye-500">*</span></label>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-2.5" id="grade-quick-buttons">
+                            <button type="button" data-grade="Kelas 1" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 1</button>
+                            <button type="button" data-grade="Kelas 2" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 2</button>
+                            <button type="button" data-grade="Kelas 3" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 3</button>
+                            <button type="button" data-grade="Kelas 4" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 4</button>
+                            <button type="button" data-grade="Kelas 5" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 5</button>
+                            <button type="button" data-grade="Kelas 6" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 6</button>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-tosca-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            </div>
+                            <input type="text" id="student-class" placeholder="Contoh: Kelas 3A atau Kelas 5B" required class="w-full pl-11 pr-4 py-3 bg-tosca-50/50 border-2 border-tosca-200 rounded-2xl text-slate-800 font-semibold placeholder-slate-400 focus:outline-none focus:border-tosca-500 focus:bg-white transition text-base">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">3. Keperluan Kunjungan <span class="text-oranye-500">*</span></label>
+                        <input type="hidden" id="visit-purpose" required>
+                        <div class="grid grid-cols-2 gap-3" id="purpose-cards">
+                            <button type="button" data-purpose="Baca Buku" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-tosca-400 hover:bg-tosca-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                                <div class="w-12 h-12 rounded-2xl bg-tosca-100 text-tosca-600 group-hover:scale-110 transition flex items-center justify-center">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                </div>
+                                <span class="font-display font-bold text-base text-slate-800">Baca Buku</span>
+                            </button>
+                            <button type="button" data-purpose="Pinjam Buku" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-oranye-400 hover:bg-oranye-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                                <div class="w-12 h-12 rounded-2xl bg-oranye-100 text-oranye-600 group-hover:scale-110 transition flex items-center justify-center">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9zm7 3v5m0 0l-2-2m2 2l2-2"/></svg>
+                                </div>
+                                <span class="font-display font-bold text-base text-slate-800">Pinjam Buku</span>
+                            </button>
+                            <button type="button" data-purpose="Belajar" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-tosca-400 hover:bg-tosca-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                                <div class="w-12 h-12 rounded-2xl bg-butter-200 text-amber-700 group-hover:scale-110 transition flex items-center justify-center">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                </div>
+                                <span class="font-display font-bold text-base text-slate-800">Belajar</span>
+                            </button>
+                            <button type="button" data-purpose="Main" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-oranye-400 hover:bg-oranye-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                                <div class="w-12 h-12 rounded-2xl bg-butter-200 text-oranye-600 group-hover:scale-110 transition flex items-center justify-center">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+                                </div>
+                                <span class="font-display font-bold text-base text-slate-800">Main</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
+                        <button type="submit" id="submit-btn" class="flex-1 py-4 px-6 rounded-2xl bg-gradient-to-r from-oranye-500 to-oranye-600 hover:from-oranye-600 hover:to-orange-700 text-white font-display font-bold text-lg shadow-lg shadow-oranye-500/30 transform active:scale-[0.98] transition flex items-center justify-center gap-2.5 cursor-pointer">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            <span id="submit-btn-text">Simpan Kunjungan</span>
+                        </button>
+                        <button type="button" id="cancel-edit-btn" class="hidden py-4 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-display font-bold text-base transition cursor-pointer">Batal</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="lg:col-span-7 space-y-5">
+                <div class="bg-white rounded-3xl shadow-md border-2 border-tosca-200 overflow-hidden">
+                    <div class="p-5 bg-tosca-50/70 border-b border-tosca-100 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="font-display text-lg font-bold text-slate-800">Daftar Kunjungan (<span id="filtered-count" class="text-tosca-600">0</span>)</h3>
+                            <button type="button" id="btn-reset-all" class="text-xs font-semibold text-red-600 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition self-start sm:self-auto flex items-center gap-1 cursor-pointer">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                <span>Bersihkan Data</span>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                            <div class="relative">
+                                <input type="text" id="search-input" placeholder="Cari Nama / Kelas..." class="w-full pl-9 pr-3 py-2 bg-white border border-tosca-200 rounded-xl text-sm focus:outline-none focus:border-tosca-500">
+                                <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </div>
+                            <div>
+                                <select id="filter-purpose" class="w-full px-3 py-2 bg-white border border-tosca-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-tosca-500">
+                                    <option value="">Semua Keperluan</option>
+                                    <option value="Baca Buku">Baca Buku</option>
+                                    <option value="Pinjam Buku">Pinjam Buku</option>
+                                    <option value="Belajar">Belajar</option>
+                                    <option value="Main">Main</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="date" id="filter-date" class="w-full px-3 py-2 bg-white border border-tosca-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-tosca-500">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-butter-100 text-tosca-800 text-xs uppercase font-bold sticky top-0 z-10 border-b border-butter-300">
+                                <tr>
+                                    <th class="py-3.5 px-3 w-12 text-center">No.</th>
+                                    <th class="py-3.5 px-3">Tgl & Jam</th>
+                                    <th class="py-3.5 px-3">Nama</th>
+                                    <th class="py-3.5 px-3">Kelas</th>
+                                    <th class="py-3.5 px-3">Keperluan</th>
+                                    <th class="py-3.5 px-3 text-center w-24">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visits-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="hidden py-12 px-4 text-center">
+                        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-butter-100 text-oranye-500 flex items-center justify-center">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <h4 class="font-display font-bold text-slate-700 text-base">Belum ada data kunjungan</h4>
+                        <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">Isi formulir untuk menambahkan data.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-tosca-100 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+            <p class="font-semibold text-tosca-700">Perpustakaan MI Asih Putera &bull; Membaca Membuka Jendela Dunia</p>
+            <p>Data tersimpan otomatis di Google Sheets.</p>
+        </div>
+    </footer>
+
+    <script>
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFcRqHFiA-YNp2JOixQCsEtDMayM7idNyJXhOwAgAKoKmEmnQIMCIrImB1QXgwGDqcdg/exec";
+
+        let visitsData = [];
+        const visitForm = document.getElementById('visit-form');
+        const editingIdInput = document.getElementById('editing-id');
+        const formHeader = document.getElementById('form-header');
+        const formTitle = document.getElementById('form-title');
+        const formBadge = document.getElementById('form-badge');
+        const submitBtnText = document.getElementById('submit-btn-text');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const studentNameInput = document.getElementById('student-name');
+        const clearNameBtn = document.getElementById('clear-name-btn');
+        const studentClassInput = document.getElementById('student-class');
+        const visitPurposeInput = document.getElementById('visit-purpose');
+        const gradeButtons = document.querySelectorAll('.grade-btn');
+        const purposeCards = document.querySelectorAll('.purpose-card');
+        const visitsTableBody = document.getElementById('visits-table-body');
+        const emptyState = document.getElementById('empty-state');
+        const filteredCountEl = document.getElementById('filtered-count');
+        const searchInput = document.getElementById('search-input');
+        const filterPurposeSelect = document.getElementById('filter-purpose');
+        const filterDateInput = document.getElementById('filter-date');
+        const statTotal = document.getElementById('stat-total');
+        const statBaca = document.getElementById('stat-baca');
+        const statPinjam = document.getElementById('stat-pinjam');
+        const statBelajar = document.getElementById('stat-belajar');
+        const statMain = document.getElementById('stat-main');
+        
+        const adminMenuBtn = document.getElementById('admin-menu-btn');
+        const adminDropdown = document.getElementById('admin-dropdown');
+        const btnExportExcel = document.getElementById('btn-export-excel');
+        const inputImportExcel = document.getElementById('input-import-excel');
+        const btnDownloadTemplate = document.getElementById('btn-download-template');
+        const btnResetAll = document.getElementById('btn-reset-all');
+
+        adminMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            adminDropdown.classList.toggle('hidden');
+        });
+        window.addEventListener('click', () => {
+            if (!adminDropdown.classList.contains('hidden')) {
+                adminDropdown.classList.add('hidden');
+            }
+        });
+        adminDropdown.addEventListener('click', (e) => e.stopPropagation());
+
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('live-date').textContent = now.toLocaleDateString('id-ID', dateOptions);
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('live-clock').textContent = `${h}:${m}:${s} WIB`;
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        function getTodayISO() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const styles = {
+                success: 'bg-tosca-600 text-white border-butter-300',
+                error: 'bg-red-600 text-white border-red-200',
+                info: 'bg-oranye-500 text-white border-butter-200'
+            };
+            toast.className = `${styles[type] || styles.success} pointer-events-auto px-4 py-3 rounded-2xl shadow-lg border-2 flex items-center justify-between gap-3 animate-pop text-sm font-semibold`;
+            toast.innerHTML = `<span>${message}</span><button type="button" class="text-white/80 hover:text-white font-bold text-lg leading-none cursor-pointer">&times;</button>`;
+            toast.querySelector('button').addEventListener('click', () => toast.remove());
+            container.appendChild(toast);
+            setTimeout(() => { if (toast.parentElement) toast.remove(); }, 3500);
+        }
+
+        function showModalDialog({ title, message, confirmText = 'Ya, Lanjutkan', secondaryText = null, onConfirm, onSecondary }) {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+            const secondaryBtn = document.getElementById('modal-secondary-btn');
+            const cancelBtn = document.getElementById('modal-cancel-btn');
+            confirmBtn.textContent = confirmText;
+            if (secondaryText) {
+                secondaryBtn.textContent = secondaryText;
+                secondaryBtn.classList.remove('hidden');
+            } else {
+                secondaryBtn.classList.add('hidden');
+            }
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            const cleanup = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+                secondaryBtn.replaceWith(secondaryBtn.cloneNode(true));
+                cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+            };
+            document.getElementById('modal-confirm-btn').addEventListener('click', () => { cleanup(); if (onConfirm) onConfirm(); });
+            document.getElementById('modal-secondary-btn').addEventListener('click', () => { cleanup(); if (onSecondary) onSecondary(); });
+            document.getElementById('modal-cancel-btn').addEventListener('click', cleanup);
+        }
+
+        async function fetchVisitsFromSheets() {
+            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("GANTI_DENGAN_URL")) {
+                showToast('URL Apps Script belum dipasang di JavaScript.', 'info');
+                return;
+            }
+            try {
+                const response = await fetch(APPS_SCRIPT_URL);
+                visitsData = await response.json();
+                renderApp();
+            } catch (error) {
+                console.error("Gagal mengambil data dari Google Sheets:", error);
+                showToast("Gagal terhubung ke database Google Sheets.", "error");
+            }
+        }
+
+        async function postToSheets(payload) {
+            try {
+                const res = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                return await res.json();
+            } catch (err) {
+                console.error("Gagal mengirim data ke Sheets:", err);
+                showToast("Gagal menyimpan perubahan ke server.", "error");
+            }
+        }
+
+        function toggleClearNameButton() {
+            clearNameBtn.classList.toggle('hidden', studentNameInput.value.length === 0);
+        }
+        studentNameInput.addEventListener('input', toggleClearNameButton);
+        clearNameBtn.addEventListener('click', () => {
+            studentNameInput.value = '';
+            toggleClearNameButton();
+            studentNameInput.focus();
+        });
+
+        function syncGradeButtonsHighlight(classValue) {
+            const trimmed = classValue.trim().toLowerCase();
+            gradeButtons.forEach(btn => {
+                const grade = btn.getAttribute('data-grade').toLowerCase();
+                if (trimmed.startsWith(grade)) {
+                    btn.classList.remove('bg-slate-50', 'text-slate-700', 'border-slate-200');
+                    btn.classList.add('bg-tosca-600', 'text-white', 'border-tosca-600', 'shadow-xs');
+                } else {
+                    btn.classList.remove('bg-tosca-600', 'text-white', 'border-tosca-600', 'shadow-xs');
+                    btn.classList.add('bg-slate-50', 'text-slate-700', 'border-slate-200');
+                }
+            });
+        }
+        studentClassInput.addEventListener('input', () => syncGradeButtonsHighlight(studentClassInput.value));
+        gradeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const selectedGrade = btn.getAttribute('data-grade');
+                studentClassInput.value = selectedGrade;
+                syncGradeButtonsHighlight(selectedGrade);
+                studentClassInput.focus();
+            });
+        });
+
+        function selectPurposeCard(purposeValue) {
+            visitPurposeInput.value = purposeValue;
+            purposeCards.forEach(c => {
+                if (c.getAttribute('data-purpose') === purposeValue) {
+                    c.classList.remove('border-slate-200', 'bg-white');
+                    c.classList.add('border-tosca-500', 'bg-butter-100', 'ring-4', 'ring-butter-300/70', 'scale-[1.02]');
+                } else {
+                    c.classList.remove('border-tosca-500', 'bg-butter-100', 'ring-4', 'ring-butter-300/70', 'scale-[1.02]');
+                    c.classList.add('border-slate-200', 'bg-white');
+                }
+            });
+        }
+        purposeCards.forEach(card => card.addEventListener('click', () => selectPurposeCard(card.getAttribute('data-purpose'))));
+
+        function resetFormState() {
+            editingIdInput.value = '';
+            studentNameInput.value = '';
+            toggleClearNameButton();
+            studentClassInput.value = '';
+            visitPurposeInput.value = '';
+            formHeader.classList.remove('bg-oranye-100', 'border-oranye-200');
+            formHeader.classList.add('bg-butter-200', 'border-butter-300');
+            formTitle.textContent = 'Isi Data Kunjungan';
+            formBadge.textContent = 'Mudah & Cepat';
+            submitBtnText.textContent = 'Simpan Kunjungan';
+            cancelEditBtn.classList.add('hidden');
+            gradeButtons.forEach(b => {
+                b.classList.remove('bg-tosca-600', 'text-white', 'border-tosca-600', 'shadow-xs');
+                b.classList.add('bg-slate-50', 'text-slate-700', 'border-slate-200');
+            });
+            purposeCards.forEach(c => {
+                c.classList.remove('border-tosca-500', 'bg-butter-100', 'ring-4', 'ring-butter-300/70', 'scale-[1.02]');
+                c.classList.add('border-slate-200', 'bg-white');
+            });
+        }
+        cancelEditBtn.addEventListener('click', () => { resetFormState(); showToast('Mode edit dibatalkan.', 'info'); });
+
+        visitForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = studentNameInput.value.trim();
+            const studentClass = studentClassInput.value.trim();
+            const purpose = visitPurposeInput.value.trim();
+            const editingId = editingIdInput.value;
+
+            if (!name) { showToast('Mohon isi kolom Nama terlebih dahulu!', 'error'); studentNameInput.focus(); return; }
+            if (!studentClass) { showToast('Mohon pilih atau isi kolom Kelas!', 'error'); studentClassInput.focus(); return; }
+            if (!purpose) { showToast('Mohon pilih salah satu Keperluan Kunjungan!', 'error'); return; }
+
+            if (editingId) {
+                showToast("Memperbarui data di Google Sheets...", "info");
+                await postToSheets({ action: 'UPDATE', id: editingId, name, studentClass, purpose });
+                showToast(`Data kunjungan ${name} berhasil diperbarui!`, 'success');
+            } else {
+                showToast("Menyimpan ke Google Sheets...", "info");
+                const newId = Date.now().toString() + Math.random().toString(36).substring(2, 6);
+                await postToSheets({ action: 'CREATE', id: newId, name, studentClass, purpose });
+                showToast(`Terima kasih ${name}! Kunjungan berhasil disimpan.`, 'success');
+            }
+            resetFormState();
+            await fetchVisitsFromSheets();
+        });
+
+        window.editSingleEntry = function(id) {
+            const item = visitsData.find(entry => String(entry.id) === String(id));
+            if (!item) return;
+            editingIdInput.value = item.id;
+            studentNameInput.value = item.name;
+            toggleClearNameButton();
+            studentClassInput.value = item.studentClass;
+            syncGradeButtonsHighlight(item.studentClass);
+            selectPurposeCard(normalizePurpose(item.purpose));
+            formHeader.classList.remove('bg-butter-200', 'border-butter-300');
+            formHeader.classList.add('bg-oranye-100', 'border-oranye-200');
+            formTitle.textContent = 'Edit Data Kunjungan';
+            formBadge.textContent = 'Mode Koreksi';
+            submitBtnText.textContent = 'Simpan Perubahan';
+            cancelEditBtn.classList.remove('hidden');
+            visitForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            studentNameInput.focus();
+        };
+
+        window.deleteSingleEntry = function(id) {
+            showModalDialog({
+                title: 'Hapus Data Kunjungan?',
+                message: 'Catatan kunjungan ini akan dihapus permanen dari Google Sheets.',
+                confirmText: 'Ya, Hapus',
+                onConfirm: async () => {
+                    if (editingIdInput.value === id) resetFormState();
+                    showToast("Menghapus data...", "info");
+                    await postToSheets({ action: 'DELETE', id });
+                    showToast('Satu data kunjungan telah dihapus.', 'info');
+                    await fetchVisitsFromSheets();
+                }
+            });
+        };
+
+        btnResetAll.addEventListener('click', () => {
+            if (visitsData.length === 0) { showToast('Daftar kunjungan sudah kosong.', 'info'); return; }
+            showModalDialog({
+                title: 'Bersihkan Semua Data?',
+                message: `Seluruh (${visitsData.length}) catatan kunjungan akan dihapus dari Google Sheets!`,
+                confirmText: 'Ya, Bersihkan Semua',
+                onConfirm: async () => {
+                    showToast("Membersihkan database...", "info");
+                    await postToSheets({ action: 'CLEAR_ALL' });
+                    resetFormState();
+                    showToast('Semua data kunjungan telah dibersihkan.', 'info');
+                    await fetchVisitsFromSheets();
+                }
+            });
+        });
+
+        function getPurposeBadgeHTML(purpose) {
+            const normalized = normalizePurpose(purpose);
+            switch (normalized) {
+                case 'Baca Buku': return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-tosca-100 text-tosca-700">📖 Baca Buku</span>`;
+                case 'Pinjam Buku': return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-oranye-100 text-oranye-700">🎒 Pinjam Buku</span>`;
+                case 'Belajar': return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-butter-200 text-amber-800">✏️ Belajar</span>`;
+                case 'Main': return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-oranye-700">🧩 Main</span>`;
+                default: return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">${escapeHTML(purpose)}</span>`;
+            }
+        }
+
+        function updateTodayStats() {
+            const todayISO = getTodayISO();
+            const todayFormatted = todayISO.split('-').reverse().join('/'); // Format DD/MM/YYYY
+            
+            const todayVisits = visitsData.filter(item => String(item.date).startsWith(todayFormatted));
+            statTotal.textContent = todayVisits.length;
+            statBaca.textContent = todayVisits.filter(i => normalizePurpose(i.purpose) === 'Baca Buku').length;
+            statPinjam.textContent = todayVisits.filter(i => normalizePurpose(i.purpose) === 'Pinjam Buku').length;
+            statBelajar.textContent = todayVisits.filter(i => normalizePurpose(i.purpose) === 'Belajar').length;
+            statMain.textContent = todayVisits.filter(i => normalizePurpose(i.purpose) === 'Main').length;
+        }
+
+        function renderTable() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const purposeFilter = filterPurposeSelect.value;
+            const dateFilter = filterDateInput.value; // Format YYYY-MM-DD dari input date
+
+            let formattedDateFilter = "";
+            if (dateFilter) {
+                formattedDateFilter = dateFilter.split('-').reverse().join('/'); // Ubah ke DD/MM/YYYY
+            }
+
+            const filtered = visitsData.filter(item => {
+                const matchSearch = String(item.name).toLowerCase().includes(searchTerm) || String(item.studentClass).toLowerCase().includes(searchTerm);
+                const matchPurpose = !purposeFilter || normalizePurpose(item.purpose) === purposeFilter;
+                const matchDate = !formattedDateFilter || String(item.date) === formattedDateFilter;
+                return matchSearch && matchPurpose && matchDate;
+            });
+            
+            filteredCountEl.textContent = filtered.length;
+            visitsTableBody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+            
+            filtered.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-tosca-50/40 transition';
+                tr.innerHTML = `
+                    <td class="py-3 px-3 text-center font-semibold text-slate-500">${index + 1}</td>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                        <div class="font-semibold text-slate-700">${escapeHTML(item.date)}</div>
+                        <div class="text-xs text-slate-400">${escapeHTML(item.time)} WIB</div>
+                    </td>
+                    <td class="py-3 px-3 font-bold text-slate-800">${escapeHTML(item.name)}</td>
+                    <td class="py-3 px-3 whitespace-nowrap"><span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-semibold text-xs">${escapeHTML(item.studentClass)}</span></td>
+                    <td class="py-3 px-3 whitespace-nowrap">${getPurposeBadgeHTML(item.purpose)}</td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
+                        <div class="inline-flex items-center gap-1">
+                            <button type="button" onclick="editSingleEntry('${item.id}')" title="Edit" class="p-1.5 rounded-lg text-tosca-600 hover:bg-tosca-100 transition cursor-pointer">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </button>
+                            <button type="button" onclick="deleteSingleEntry('${item.id}')" title="Hapus" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                visitsTableBody.appendChild(tr);
+            });
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function renderApp() {
+            updateTodayStats();
+            renderTable();
+        }
+
+        searchInput.addEventListener('input', renderTable);
+        filterPurposeSelect.addEventListener('change', renderTable);
+        filterDateInput.addEventListener('change', renderTable);
+
+        function normalizePurpose(rawPurpose) {
+            if (!rawPurpose) return 'Baca Buku';
+            const lower = String(rawPurpose).toLowerCase().trim();
+            if (lower.includes('pinjam')) return 'Pinjam Buku';
+            if (lower.includes('belajar')) return 'Belajar';
+            if (lower.includes('main')) return 'Main';
+            return 'Baca Buku';
+        }
+
+        btnExportExcel.addEventListener('click', () => {
+            adminDropdown.classList.add('hidden');
+            if (visitsData.length === 0) { showToast('Belum ada data untuk diekspor.', 'error'); return; }
+            try {
+                const worksheetRows = [...visitsData].reverse().map((item, idx) => ({
+                    'No.': idx + 1,
+                    'Tgl & Jam': `${item.date} ${item.time}`,
+                    'Nama': item.name,
+                    'Kelas': item.studentClass,
+                    'Keperluan Kunjungan': normalizePurpose(item.purpose)
+                }));
+                const worksheet = XLSX.utils.json_to_sheet(worksheetRows);
+                worksheet['!cols'] = [{ wch: 6 }, { wch: 22 }, { wch: 28 }, { wch: 14 }, { wch: 22 }];
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Kunjungan Perpus');
+                XLSX.writeFile(workbook, `Kunjungan_Perpus_MI_Asih_Putera.xlsx`);
+                showToast(`Berhasil mengekspor ${visitsData.length} data ke Excel!`, 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Terjadi kesalahan saat mengekspor Excel.', 'error');
+            }
+        });
+
+        btnDownloadTemplate.addEventListener('click', () => {
+            adminDropdown.classList.add('hidden');
+            const sampleRows = [{ 'No.': 1, 'Tgl & Jam': '15/11/2026 08:15:00', 'Nama': 'Ahmad Fauzan', 'Kelas': 'Kelas 4A', 'Keperluan Kunjungan': 'Baca Buku' }];
+            const ws = XLSX.utils.json_to_sheet(sampleRows);
+            ws['!cols'] = [{ wch: 6 }, { wch: 22 }, { wch: 28 }, { wch: 14 }, { wch: 22 }];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Template Kunjungan');
+            XLSX.writeFile(wb, 'Template_Kunjungan_Perpus_MI_Asih_Putera.xlsx');
+            showToast('Template Excel berhasil diunduh!', 'success');
+        });
+
+        inputImportExcel.addEventListener('change', (e) => {
+            adminDropdown.classList.add('hidden');
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const jsonRows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: '' });
+
+                    let count = 0;
+                    showToast("Mengunggah data ke Google Sheets...", "info");
+                    for (const row of jsonRows) {
+                        const normalizedRow = {};
+                        Object.keys(row).forEach(k => normalizedRow[k.toLowerCase().trim()] = row[k]);
+                        const name = String(normalizedRow['nama'] || normalizedRow['nama siswa'] || '').trim();
+                        if (name) {
+                            const studentClass = String(normalizedRow['kelas'] || normalizedRow['kls'] || '-').trim();
+                            const rawPurpose = normalizedRow['keperluan kunjungan'] || normalizedRow['keperluan'] || 'Baca Buku';
+                            const id = Date.now().toString() + Math.random().toString(36).substring(2, 6);
+                            
+                            await postToSheets({ action: 'CREATE', id, name, studentClass, purpose: normalizePurpose(rawPurpose) });
+                            count++;
+                        }
+                    }
+                    showToast(`Berhasil mengimpor ${count} data ke Google Sheets!`, 'success');
+                    await fetchVisitsFromSheets();
+                } catch (err) {
+                    console.error(err);
+                    showToast('Gagal membaca file Excel.', 'error');
+                } finally {
+                    inputImportExcel.value = '';
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        fetchVisitsFromSheets();
+    </script>
+</body>
+</html>
