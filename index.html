@@ -56,8 +56,7 @@
         </div>
     </div>
 
-    <!-- HEADER: MENU BURGER DI POJOK KANAN ATAS STANDAR -->
-    <header class="bg-gradient-to-r from-tosca-600 via-tosca-500 to-teal-500 text-white shadow-lg border-b-4 border-butter-300 relative">
+    <header class="bg-gradient-to-r from-tosca-600 via-tosca-500 to-teal-500 text-white shadow-lg border-b-4 border-butter-300 relative z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
@@ -81,8 +80,7 @@
                     </div>
                 </div>
 
-                <!-- MENU BURGER DI POJOK KANAN ATAS -->
-                <div class="relative shrink-0">
+                <div class="relative shrink-0 z-30">
                     <button type="button" id="admin-menu-btn" title="Menu Admin / Berkas" class="bg-white/20 hover:bg-white/30 border border-white/40 text-white p-3 rounded-2xl transition cursor-pointer flex items-center justify-center">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -109,7 +107,7 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-7">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-7 relative z-10">
         <section aria-label="Statistik Kunjungan Hari Ini" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             <div class="col-span-2 sm:col-span-1 bg-white rounded-3xl p-4 shadow-xs border-2 border-tosca-200 flex items-center gap-3.5">
                 <div class="w-12 h-12 rounded-2xl bg-tosca-100 text-tosca-600 flex items-center justify-center shrink-0">
@@ -159,8 +157,7 @@
         </section>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-            <!-- FORMULIR DENGAN TATA LETAK HEADER YANG PAS & RAPI -->
-            <section class="lg:col-span-5 bg-white rounded-3xl shadow-md border-4 border-tosca-200 overflow-hidden">
+            <section class="lg:col-span-5 bg-white rounded-3xl shadow-md border-4 border-tosca-200 overflow-hidden relative z-20">
                 <div id="form-header" class="bg-butter-200 px-5 sm:px-6 py-4 border-b-2 border-butter-300 flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <span id="form-indicator" class="w-3.5 h-3.5 rounded-full bg-oranye-500 inline-block shrink-0"></span>
@@ -168,7 +165,7 @@
                     </div>
                     <span id="form-badge" class="text-xs font-bold bg-white text-tosca-700 px-3 py-1 rounded-full shadow-xs shrink-0">Mudah & Cepat</span>
                 </div>
-                <form id="visit-form" class="p-6 space-y-5" novalidate>
+                <form id="visit-form" class="p-6 space-y-5 relative z-30" novalidate>
                     <input type="hidden" id="editing-id" value="">
                     <div>
                         <label for="student-name" class="block text-sm font-bold text-slate-700 mb-1.5">1. Nama Siswa <span class="text-oranye-500">*</span></label>
@@ -184,44 +181,44 @@
                     </div>
                     <div>
                         <label for="student-class" class="block text-sm font-bold text-slate-700 mb-1.5">2. Kelas <span class="text-oranye-500">*</span></label>
-                        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-2.5" id="grade-quick-buttons">
-                            <button type="button" data-grade="Kelas 1" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 1</button>
-                            <button type="button" data-grade="Kelas 2" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 2</button>
-                            <button type="button" data-grade="Kelas 3" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 3</button>
-                            <button type="button" data-grade="Kelas 4" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 4</button>
-                            <button type="button" data-grade="Kelas 5" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 5</button>
-                            <button type="button" data-grade="Kelas 6" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer">Kelas 6</button>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-2.5 relative z-40" id="grade-quick-buttons">
+                            <button type="button" data-grade="Kelas 1" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer relative z-50">Kelas 1</button>
+                            <button type="button" data-grade="Kelas 2" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer relative z-50">Kelas 2</button>
+                            <button type="button" data-grade="Kelas 3" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer relative z-50">Kelas 3</button>
+                            <button type="button" data-grade="Kelas 4" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer relative z-50">Kelas 4</button>
+                            <button type="button" data-grade="Kelas 5" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer relative z-50">Kelas 5</button>
+                            <button type="button" data-grade="Kelas 6" class="grade-btn py-2.5 px-2 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-tosca-400 hover:bg-tosca-50 font-display font-bold text-sm text-slate-700 transition cursor-pointer relative z-50">Kelas 6</button>
                         </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-tosca-500">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                             </div>
-                            <input type="text" id="student-class" placeholder="Contoh: Kelas 3A atau Kelas 5B" required class="w-full pl-11 pr-4 py-3 bg-tosca-50/50 border-2 border-tosca-200 rounded-2xl text-slate-800 font-semibold placeholder-slate-400 focus:outline-none focus:border-tosca-500 focus:bg-white transition text-base">
+                            <input type="text" id="student-class" placeholder="Contoh: Kelas 3A atau Kelas 5B" required class="w-full pl-11 pr-4 py-3 bg-tosca-50/50 border-2 border-tosca-200 rounded-2xl text-slate-800 font-semibold placeholder-slate-400 focus:outline-none focus:border-tosca-500 focus:bg-white transition text-base relative z-30">
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">3. Keperluan Kunjungan <span class="text-oranye-500">*</span></label>
                         <input type="hidden" id="visit-purpose" required>
-                        <div class="grid grid-cols-2 gap-3" id="purpose-cards">
-                            <button type="button" data-purpose="Baca Buku" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-tosca-400 hover:bg-tosca-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                        <div class="grid grid-cols-2 gap-3 relative z-40" id="purpose-cards">
+                            <button type="button" data-purpose="Baca Buku" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-tosca-400 hover:bg-tosca-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer relative z-50">
                                 <div class="w-12 h-12 rounded-2xl bg-tosca-100 text-tosca-600 group-hover:scale-110 transition flex items-center justify-center">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                                 </div>
                                 <span class="font-display font-bold text-base text-slate-800">Baca Buku</span>
                             </button>
-                            <button type="button" data-purpose="Pinjam Buku" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-oranye-400 hover:bg-oranye-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                            <button type="button" data-purpose="Pinjam Buku" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-oranye-400 hover:bg-oranye-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer relative z-50">
                                 <div class="w-12 h-12 rounded-2xl bg-oranye-100 text-oranye-600 group-hover:scale-110 transition flex items-center justify-center">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9zm7 3v5m0 0l-2-2m2 2l2-2"/></svg>
                                 </div>
                                 <span class="font-display font-bold text-base text-slate-800">Pinjam Buku</span>
                             </button>
-                            <button type="button" data-purpose="Belajar" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-tosca-400 hover:bg-tosca-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                            <button type="button" data-purpose="Belajar" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-tosca-400 hover:bg-tosca-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer relative z-50">
                                 <div class="w-12 h-12 rounded-2xl bg-butter-200 text-amber-700 group-hover:scale-110 transition flex items-center justify-center">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                 </div>
                                 <span class="font-display font-bold text-base text-slate-800">Belajar</span>
                             </button>
-                            <button type="button" data-purpose="Main" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-oranye-400 hover:bg-oranye-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer">
+                            <button type="button" data-purpose="Main" class="purpose-card group p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-oranye-400 hover:bg-oranye-50/50 transition flex flex-col items-center text-center gap-2 focus:outline-none cursor-pointer relative z-50">
                                 <div class="w-12 h-12 rounded-2xl bg-butter-200 text-oranye-600 group-hover:scale-110 transition flex items-center justify-center">
                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
                                 </div>
@@ -229,17 +226,16 @@
                             </button>
                         </div>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
-                        <button type="submit" id="submit-btn" class="flex-1 py-4 px-6 rounded-2xl bg-gradient-to-r from-oranye-500 to-oranye-600 hover:from-oranye-600 hover:to-orange-700 text-white font-display font-bold text-lg shadow-lg shadow-oranye-500/30 transform active:scale-[0.98] transition flex items-center justify-center gap-2.5 cursor-pointer">
+                    <div class="flex flex-col sm:flex-row gap-2.5 pt-1 relative z-40">
+                        <button type="submit" id="submit-btn" class="flex-1 py-4 px-6 rounded-2xl bg-gradient-to-r from-oranye-500 to-oranye-600 hover:from-oranye-600 hover:to-orange-700 text-white font-display font-bold text-lg shadow-lg shadow-oranye-500/30 transform active:scale-[0.98] transition flex items-center justify-center gap-2.5 cursor-pointer relative z-50">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                             <span id="submit-btn-text">Simpan Kunjungan</span>
                         </button>
-                        <button type="button" id="cancel-edit-btn" class="hidden py-4 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-display font-bold text-base transition cursor-pointer">Batal</button>
+                        <button type="button" id="cancel-edit-btn" class="hidden py-4 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-display font-bold text-base transition cursor-pointer relative z-50">Batal</button>
                     </div>
                 </form>
             </section>
 
-            <!-- TABEL DENGAN PAGINATION (TANPA TOMBOL BERSIHKAN DATA) -->
             <section class="lg:col-span-7 space-y-5">
                 <div class="bg-white rounded-3xl shadow-md border-2 border-tosca-200 overflow-hidden">
                     <div class="p-5 bg-tosca-50/70 border-b border-tosca-100 space-y-3">
@@ -281,7 +277,6 @@
                         </table>
                     </div>
                     
-                    <!-- KONTROL PAGINATION -->
                     <div id="pagination-container" class="px-5 py-3.5 bg-tosca-50/50 border-t border-tosca-100 flex items-center justify-between text-xs sm:text-sm">
                         <span id="pagination-info" class="text-slate-600 font-semibold">Menampilkan 0 dari 0 data</span>
                         <div class="flex items-center gap-1.5">
@@ -303,7 +298,6 @@
         </div>
     </main>
 
-    <!-- FOOTER DENGAN FORMAT TEKS BARU -->
     <footer class="bg-white border-t border-tosca-100 py-4 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
             <p class="font-semibold text-tosca-700">MI Asih Putera @ 2026</p>
@@ -316,7 +310,7 @@
 
         let visitsData = [];
         let currentPage = 1;
-        const rowsPerPage = 10; // Jumlah data per halaman
+        const rowsPerPage = 10;
 
         const visitForm = document.getElementById('visit-form');
         const editingIdInput = document.getElementById('editing-id');
@@ -343,7 +337,6 @@
         const statBelajar = document.getElementById('stat-belajar');
         const statMain = document.getElementById('stat-main');
         
-        // Pagination Elements
         const paginationContainer = document.getElementById('pagination-container');
         const paginationInfo = document.getElementById('pagination-info');
         const pageIndicator = document.getElementById('page-indicator');
@@ -612,7 +605,6 @@
             statMain.textContent = todayVisits.filter(i => normalizePurpose(i.purpose) === 'Main').length;
         }
 
-        // RENDER TABEL DENGAN PAGINATION
         function renderTable() {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const purposeFilter = filterPurposeSelect.value;
@@ -632,7 +624,6 @@
             
             filteredCountEl.textContent = filtered.length;
 
-            // Logika Pagination
             const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
             if (currentPage > totalPages) currentPage = totalPages;
             if (currentPage < 1) currentPage = 1;
@@ -678,7 +669,6 @@
                 visitsTableBody.appendChild(tr);
             });
 
-            // Update Teks & Status Tombol Pagination
             paginationInfo.textContent = `Menampilkan ${startIndex + 1}-${Math.min(endIndex, filtered.length)} dari ${filtered.length} data`;
             pageIndicator.textContent = `${currentPage} / ${totalPages}`;
             prevPageBtn.disabled = currentPage === 1;
